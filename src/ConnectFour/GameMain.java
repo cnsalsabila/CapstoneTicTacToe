@@ -81,3 +81,60 @@ public class GameMain extends JPanel {
     public void initGame() {
         board = new Board();  // allocate the game-board
     }
+
+    public void newGame() {
+        for (int row = 0; row < Board.ROWS; ++row) {
+            for (int col = 0; col < Board.COLS; ++col) {
+                board.cells[row][col].content = Seed.NO_SEED; // all cells empty
+            }
+        }
+        currentPlayer = Seed.CROSS;    // cross plays first
+        currentState = State.PLAYING;  // ready to play
+        repaint();
+    }
+
+    /** Custom painting codes on this JPanel */
+    @Override
+    public void paintComponent(Graphics g) {  // Callback via repaint()
+        super.paintComponent(g);
+        drawGradientBackground(g); // Draw gradient background
+
+        board.paint(g);  // ask the game board to paint itself
+
+        // Print status-bar message
+        if (currentState == State.PLAYING) {
+            statusBar.setForeground(Color.BLACK);
+            statusBar.setText((currentPlayer == Seed.CROSS) ? "X's Turn" : "O's Turn");
+        } else if (currentState == State.DRAW) {
+            statusBar.setForeground(Color.RED);
+            statusBar.setText("It's a Draw! Click to play again.");
+        } else if (currentState == State.CROSS_WON) {
+            statusBar.setForeground(COLOR_CROSS);
+            statusBar.setText("'X' Won! Click to play again.");
+        } else if (currentState == State.NOUGHT_WON) {
+            statusBar.setForeground(COLOR_NOUGHT);
+            statusBar.setText("'O' Won! Click to play again.");
+        }
+    }
+
+    /** Draw a gradient background */
+    private void drawGradientBackground(Graphics g) {
+        Graphics2D g2d = (Graphics2D) g;
+        GradientPaint gradient = new GradientPaint(0, 0, COLOR_BG_START, getWidth(), getHeight(), COLOR_BG_END);
+        g2d.setPaint(gradient);
+        g2d.fillRect(0, 0, getWidth(), getHeight());
+    }
+
+    /** The entry "main" method */
+    public static void main(String[] args) {
+        // Run GUI construction codes in Event-Dispatching thread for thread safety
+        javax.swing.SwingUtilities.invokeLater(() -> {
+            JFrame frame = new JFrame(TITLE);
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setSize(TicTacToe.Board.CANVAS_WIDTH, TicTacToe.Board.CANVAS_HEIGHT + 100);
+            frame.setLocationRelativeTo(null); // Pusatkan jendela
+            frame.setContentPane(new MainMenu(frame)); // Set menu utama sebagai konten awal
+            frame.setVisible(true); // Tampilkan jendela    // show it
+        });
+    }
+}
