@@ -7,6 +7,7 @@
  * 2 - 5026231068 - Nailah Adlina
  * 3 - 5026231173 - Naura Salsabila
  */
+package TicTacToe;
 
 public abstract class AIPlayer {
     protected int ROWS = Board.ROWS;  // number of rows
