@@ -71,4 +71,38 @@ public class MainMenu extends JFrame {
         setVisible(true);
         setLocationRelativeTo(null); // Center the window on the screen
     }
+    private Image loadImage(String path) {
+        try {
+            // Load image using file path relative to the src directory
+            File file = new File(path);  // Just the relative path, no "src/" prefix needed
+            Image img = ImageIO.read(file);
+            if (img != null) {
+                return img.getScaledInstance(250, 80, Image.SCALE_SMOOTH);
+            } else {
+                System.out.println("Image not found: " + path);
+            }
+        } catch (IOException e) {
+            // Handle the case where the image can't be loaded
+            System.out.println("Failed to load image: " + path + ". Error: " + e.getMessage());
+        }
+        return null;
+    }
+
+    // Helper method to load and return an ImageIcon for the background (supports GIF)
+    private ImageIcon loadImageback(String path) {
+        try {
+            // Load image using ImageIcon, which supports animated GIFs
+            File file = new File(path);
+            ImageIcon imgIcon = new ImageIcon(file.getAbsolutePath());
+            if (imgIcon != null) {
+                return imgIcon; // Return ImageIcon for animated GIF
+            } else {
+                System.out.println("Image not found: " + path);
+            }
+        } catch (Exception e) {
+            // Handle the case where the image can't be loaded
+            System.out.println("Failed to load image: " + path + ". Error: " + e.getMessage());
+        }
+        return null;
+    }
 }
