@@ -83,4 +83,21 @@ public class AIPlayerMinimax extends AIPlayer {
         }
         return nextMoves;
     }
+    /** The heuristic evaluation function for the current board
+     @Return +100, +10, +1 for EACH 3-, 2-, 1-in-a-line for computer.
+     -100, -10, -1 for EACH 3-, 2-, 1-in-a-line for opponent.
+     0 otherwise   */
+    private int evaluate() {
+        int score = 0;
+        // Evaluate score for each of the 8 lines (3 rows, 3 columns, 2 diagonals)
+        score += evaluateLine(0, 0, 0, 1, 0, 2);  // row 0
+        score += evaluateLine(1, 0, 1, 1, 1, 2);  // row 1
+        score += evaluateLine(2, 0, 2, 1, 2, 2);  // row 2
+        score += evaluateLine(0, 0, 1, 0, 2, 0);  // col 0
+        score += evaluateLine(0, 1, 1, 1, 2, 1);  // col 1
+        score += evaluateLine(0, 2, 1, 2, 2, 2);  // col 2
+        score += evaluateLine(0, 0, 1, 1, 2, 2);  // diagonal
+        score += evaluateLine(0, 2, 1, 1, 2, 0);  // alternate diagonal
+        return score;
+    }
 }
