@@ -31,3 +31,53 @@ public class GameMain extends JPanel {
     private JLabel statusBar;    // for displaying status message
 
     /** Constructor to setup the UI and game components */
+    public GameMain() {
+        Timer timer = new Timer(100, e -> repaint()); // Refresh display every 100ms
+        timer.start();
+
+        // This JPanel fires MouseEvent
+        super.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (currentState == State.PLAYING) {
+                    int mouseX = e.getX();
+                    int mouseY = e.getY();
+                    int colSelected = mouseX / Cell.SIZE;
+                    if (colSelected >= 0 && colSelected < board.COLS) {
+                        for (int row = board.ROWS - 1; row >= 0; row--) {
+                            if (board.cells[row][colSelected].content == Seed.NO_SEED) {
+                                currentState = board.stepGame(currentPlayer, row, colSelected);
+                                currentPlayer = (currentPlayer == Seed.CROSS) ? Seed.NOUGHT : Seed.CROSS;
+                                break;
+                            }
+                        }
+                    }
+                } else {
+                    newGame();
+                }
+                repaint(); // Refresh display
+            }
+        });
+
+        // Setup the status bar (JLabel) to display status message
+        statusBar = new JLabel();
+        statusBar.setFont(FONT_STATUS);
+        statusBar.setBackground(COLOR_STATUS_BAR);
+        statusBar.setOpaque(true);
+        statusBar.setPreferredSize(new Dimension(300, 40));
+        statusBar.setHorizontalAlignment(JLabel.CENTER);
+        statusBar.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+
+        super.setLayout(new BorderLayout());
+        super.add(statusBar, BorderLayout.PAGE_END); // same as SOUTH
+        super.setPreferredSize(new Dimension(Board.CANVAS_WIDTH, Board.CANVAS_HEIGHT + 40));
+
+        // Set up Game
+        initGame();
+        newGame();
+    }
+
+    /** Initialize the game (run once) */
+    public void initGame() {
+        board = new Board();  // allocate the game-board
+    }
