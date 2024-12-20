@@ -31,5 +31,39 @@ public enum SoundEffect {
 
     public Clip clip;
     private boolean shouldLoop; // Flag to determine if this sound should loop
+    /** Constructor */
+    private SoundEffect(String soundFileName, boolean shouldLoop) {
+        this.shouldLoop = shouldLoop;
+        try {
+            URL url = this.getClass().getClassLoader().getResource(soundFileName);
+            if (url == null) {
+                System.err.println("File audio tidak ditemukan: " + soundFileName);
+            } else {
+                AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(url);
+                clip = AudioSystem.getClip();
+                clip.open(audioInputStream);
+            }
+        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+            System.err.println("Kesalahan saat memuat audio: " + soundFileName);
+            e.printStackTrace();
+        }
+    }
 
+    /** Memainkan suara */
+    public void play() {
+        if (volume != Volume.MUTE && clip != null) {
+            if (clip.isRunning()) {
+                clip.stop(); // Hentikan jika sedang berjalan
+            }
+            clip.setFramePosition(0); // Kembalikan ke awal
+            if (shouldLoop) {
+                clip.loop(Clip.LOOP_CONTINUOUSLY); // Loop jika diperlukan
+            } else {
+                clip.start(); // Mainkan sekali
+            }
+        } else {
+            System.out.println("Efek suara dimute atau clip null.");
+        }
+    }
+    
 }
