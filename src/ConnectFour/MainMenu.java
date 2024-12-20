@@ -105,4 +105,42 @@ public class MainMenu extends JFrame {
         }
         return null;
     }
+    // Helper method to create a custom button
+    private JButton createCustomButton(Image buttonImage, int x, int y) {
+        JButton button = new JButton();
+        if (buttonImage != null) {
+            button.setIcon(new ImageIcon(buttonImage));
+        }
+        button.setBounds(x, y, 250, 80); // Position and size
+        button.setContentAreaFilled(false);
+        button.setBorderPainted(false);
+        button.setFocusPainted(false);
+        button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+        // Add hover effect
+        button.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                button.setBackground(new Color(0, 191, 255, 100)); // Light blue hover effect
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                button.setBackground(null); // Reset background
+            }
+        });
+
+        return button;
+    }
+    public static void main(String[] args) {
+        // Run GUI construction codes in the Event-Dispatching thread for thread safety
+        javax.swing.SwingUtilities.invokeLater(() -> {
+            JFrame frame = new JFrame(TITLE);
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setSize(Board.CANVAS_WIDTH, Board.CANVAS_HEIGHT + 100);
+            frame.setLocationRelativeTo(null); // Center window on screen
+            frame.setContentPane(new MainMenu(frame)); // Load MainMenu as the initial content
+            frame.setVisible(true); // Show the window
+        });
+    }
 }
