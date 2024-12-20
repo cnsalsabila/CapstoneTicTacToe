@@ -153,4 +153,26 @@ public class GameMain extends JPanel {
         board = new Board();  // allocate the game-board
         aiPlayer = new AIPlayerMinimax(board); // Instantiate AI player
     }
+
+    /** Reset the game-board contents and the current-state, ready for new game */
+    public void newGame() {
+        SoundEffect.GAME_START.play();
+        for (int row = 0; row < Board.ROWS; ++row) {
+            for (int col = 0; col < Board.COLS; ++col) {
+                board.cells[row][col].content = Seed.NO_SEED; // all cells empty
+            }
+        }
+        currentPlayer = Seed.CROSS;    // cross plays first
+        currentState = State.PLAYING;  // ready to play
+        isGameOver = false;
+        repaint();
+    }
+
+    /** AI makes its move */
+    private void makeAIMove() {
+        int[] move = aiPlayer.move(); // Get the AI's move
+        currentState = board.stepGame(currentPlayer, move[0], move[1]);
+        currentPlayer = (currentPlayer == Seed.CROSS) ? Seed.NOUGHT : Seed.CROSS;
+        repaint();
+    }
 }
