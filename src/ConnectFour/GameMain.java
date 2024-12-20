@@ -131,7 +131,7 @@ public class GameMain extends JPanel {
         javax.swing.SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame(TITLE);
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setSize(TicTacToe.Board.CANVAS_WIDTH, TicTacToe.Board.CANVAS_HEIGHT + 100);
+            frame.setSize(TicTacToe.Board.CANVAS_WIDTH, TicTacToe.Board.CANVAS_HEIGHT + 80);
             frame.setLocationRelativeTo(null); // Pusatkan jendela
             frame.setContentPane(new MainMenu(frame)); // Set menu utama sebagai konten awal
             frame.setVisible(true); // Tampilkan jendela    // show it
