@@ -100,4 +100,57 @@ public class AIPlayerMinimax extends AIPlayer {
         score += evaluateLine(0, 2, 1, 1, 2, 0);  // alternate diagonal
         return score;
     }
+    /** The heuristic evaluation function for the given line of 3 cells
+     @Return +100, +10, +1 for 3-, 2-, 1-in-a-line for computer.
+     -100, -10, -1 for 3-, 2-, 1-in-a-line for opponent.
+     0 otherwise */
+    private int evaluateLine(int row1, int col1, int row2, int col2, int row3, int col3) {
+        int score = 0;
+
+        // First cell
+        if (cells[row1][col1].content == mySeed) {
+            score = 1;
+        } else if (cells[row1][col1].content == oppSeed) {
+            score = -1;
+        }
+
+        // Second cell
+        if (cells[row2][col2].content == mySeed) {
+            if (score == 1) {   // cell1 is mySeed
+                score = 10;
+            } else if (score == -1) {  // cell1 is oppSeed
+                return 0;
+            } else {  // cell1 is empty
+                score = 1;
+            }
+        } else if (cells[row2][col2].content == oppSeed) {
+            if (score == -1) { // cell1 is oppSeed
+                score = -10;
+            } else if (score == 1) { // cell1 is mySeed
+                return 0;
+            } else {  // cell1 is empty
+                score = -1;
+            }
+        }
+
+        // Third cell
+        if (cells[row3][col3].content == mySeed) {
+            if (score > 0) {  // cell1 and/or cell2 is mySeed
+                score *= 10;
+            } else if (score < 0) {  // cell1 and/or cell2 is oppSeed
+                return 0;
+            } else {  // cell1 and cell2 are empty
+                score = 1;
+            }
+        } else if (cells[row3][col3].content == oppSeed) {
+            if (score < 0) {  // cell1 and/or cell2 is oppSeed
+                score *= 10;
+            } else if (score > 1) {  // cell1 and/or cell2 is mySeed
+                return 0;
+            } else {  // cell1 and cell2 are empty
+                score = -1;
+            }
+        }
+        return score;
+    }
 }
