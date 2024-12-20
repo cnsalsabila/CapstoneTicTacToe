@@ -92,4 +92,30 @@ public class MainMenu extends JPanel {
         }
         return null;
     }
+   // Helper method to create a custom button
+    private JButton createCustomButton(Image buttonImage, int x, int y) {
+        JButton button = new JButton();
+        if (buttonImage != null) {
+            button.setIcon(new ImageIcon(buttonImage));
+        }
+        button.setBounds(x, y, 250, 80);
+        button.setContentAreaFilled(false);
+        button.setBorderPainted(false);
+        button.setFocusPainted(false);
+        button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+        button.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                button.setBackground(new Color(0, 191, 255, 100));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                button.setBackground(null);
+            }
+        });
+
+        return button;
+    }
 }
