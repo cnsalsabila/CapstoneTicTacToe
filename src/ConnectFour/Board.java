@@ -32,4 +32,43 @@ public class Board {
     public Board() {
         initGame();
     }
+
+    public void initGame() {
+        cells = new Cell[ROWS][COLS];
+        for (int row = 0; row < ROWS; ++row) {
+            for (int col = 0; col < COLS; ++col) {
+                cells[row][col] = new Cell(row, col);
+                cells[row][col].content = Seed.NO_SEED; // Ensure cells are empty
+            }
+        }
+    }
+
+    /** Reset the game board, ready for new game */
+    public void newGame() {
+        for (int row = 0; row < ROWS; ++row) {
+            for (int col = 0; col < COLS; ++col) {
+                cells[row][col].newGame(); // clear the cell content
+            }
+        }
+    }
+
+    public State stepGame(Seed player, int selectedRow, int selectedCol) {
+        // Update game board
+        cells[selectedRow][selectedCol].content = player;
+
+        // Compute and return the new game state
+        if (hasWon(player, selectedRow, selectedCol)) {
+            return (player == Seed.CROSS) ? State.CROSS_WON : State.NOUGHT_WON;
+        } else {
+            // Nobody wins. Check for DRAW (all cells occupied) or PLAYING.
+            for (int row = 0; row < ROWS; ++row) {
+                for (int col = 0; col < COLS; ++col) {
+                    if (cells[row][col].content == Seed.NO_SEED) {
+                        return State.PLAYING; // still have empty cells
+                    }
+                }
+            }
+            return State.DRAW; // no empty cell, it's a draw
+        }
+    }
 }
