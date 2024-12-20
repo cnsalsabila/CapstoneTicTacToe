@@ -89,4 +89,26 @@ public class Board {
             return State.DRAW; // no empty cell, it's a draw
         }
     }
+    public void paint(Graphics g) {
+        // Draw the grid-lines
+        g.setColor(COLOR_GRID);
+        for (int row = 1; row < ROWS; ++row) {
+            g.fillRoundRect(0, Cell.SIZE * row - GRID_WIDTH_HALF,
+                    CANVAS_WIDTH - 1, GRID_WIDTH,
+                    GRID_WIDTH, GRID_WIDTH);
+        }
+        for (int col = 1; col < COLS; ++col) {
+            g.fillRoundRect(Cell.SIZE * col - GRID_WIDTH_HALF, 0 + Y_OFFSET,
+                    GRID_WIDTH, CANVAS_HEIGHT - 1,
+                    GRID_WIDTH, GRID_WIDTH);
+        }
+
+        // Draw all the cells
+        for (int row = 0; row < ROWS; ++row) {
+            for (int col = 0; col < COLS; ++col) {
+                cells[row][col].paint(g);  // ask the cell to paint itself
+            }
+        }
+    }
+}
     
