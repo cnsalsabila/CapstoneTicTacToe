@@ -50,4 +50,18 @@ public class Cell {
     public void newGame() {
         content = Seed.NO_SEED;
     }
+    /** Paint itself on the graphics canvas, given the Graphics context */
+    public void paint(Graphics g) {
+        // Draw the background image if it's not null
+        if (backgroundImage != null) {
+            g.drawImage(backgroundImage, col * SIZE, row * SIZE, SIZE, SIZE, null);
+        }
+
+        // Draw the Seed (cross or nought) if the content is not empty
+        int x1 = col * SIZE + PADDING;
+        int y1 = row * SIZE + PADDING;
+        if (content == Seed.CROSS || content == Seed.NOUGHT) {
+            g.drawImage(content.getImage(), x1, y1, SEED_SIZE, SEED_SIZE, null);
+        }
+    }
 }
