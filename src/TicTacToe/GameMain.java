@@ -103,4 +103,54 @@ public class GameMain extends JPanel {
                 repaint();
             }
         });
+         statusBar = new JLabel();
+        statusBar.setFont(FONT_STATUS);
+        statusBar.setBackground(COLOR_STATUS_BAR);
+        statusBar.setOpaque(true);
+        statusBar.setPreferredSize(new Dimension(300, 40));
+        statusBar.setHorizontalAlignment(JLabel.CENTER);
+        statusBar.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+
+        // Load the image for the button (Make sure the image path is correct)
+        ImageIcon menuButtonIcon = new ImageIcon("src/menu.png");
+
+        // Create the button and set the image as the icon
+        backToMenuButton = new JButton(menuButtonIcon);
+        backToMenuButton.setContentAreaFilled(false); // Remove default button background
+        backToMenuButton.setBorder(BorderFactory.createEmptyBorder()); // Remove border
+        backToMenuButton.setPreferredSize(new Dimension(150, 50)); // Set ukuran tombol menjadi 150x50
+        backToMenuButton.setFocusPainted(false); // Prevent the button from being highlighted when clicked
+
+        // Action listener remains the same
+        backToMenuButton.addActionListener(e -> {
+            JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(GameMain.this);
+            parentFrame.setContentPane(new MainMenu(parentFrame));  // Assume MainMenu is a class that you have for the main menu
+            parentFrame.revalidate();
+        });
+
+
+        // Create a container panel for the button and status bar
+        JPanel bottomPanel = new JPanel();
+        bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.X_AXIS)); // Horizontal layout
+        bottomPanel.setBackground(COLOR_STATUS_BAR);
+        bottomPanel.add(Box.createHorizontalGlue()); // Center alignment
+        bottomPanel.add(backToMenuButton); // Add the button
+        bottomPanel.add(Box.createHorizontalGlue()); // Center alignment
+        bottomPanel.add(statusBar); // Add the status bar
+
+
+        super.setLayout(new BorderLayout());
+        super.add(bottomPanel, BorderLayout.PAGE_END);
+        super.setPreferredSize(new Dimension(Board.CANVAS_WIDTH, Board.CANVAS_HEIGHT + 40));
+
+        // Set up Game
+        initGame();
+        newGame();
+    }
+
+    /** Initialize the game (run once) */
+    public void initGame() {
+        board = new Board();  // allocate the game-board
+        aiPlayer = new AIPlayerMinimax(board); // Instantiate AI player
+    }
 }
