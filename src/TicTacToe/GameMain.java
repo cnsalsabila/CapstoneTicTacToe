@@ -175,4 +175,63 @@ public class GameMain extends JPanel {
         currentPlayer = (currentPlayer == Seed.CROSS) ? Seed.NOUGHT : Seed.CROSS;
         repaint();
     }
+    /** Custom painting codes on this JPanel */
+    @Override
+    public void paintComponent(Graphics g) {  // Callback via repaint()
+        super.paintComponent(g);
+        drawGradientBackground(g); // Draw gradient background
+
+        board.paint(g);  // ask the game board to paint itself
+
+        // Print status-bar message
+        if (currentState == State.PLAYING) {
+            statusBar.setForeground(Color.BLACK);
+            statusBar.setText((currentPlayer == Seed.CROSS) ? "X's Turn" : "O's Turn");
+        } else if (currentState == State.DRAW) {
+            statusBar.setForeground(Color.RED);
+            statusBar.setText("It's a Draw! Click to play again.");
+        } else if (currentState == State.CROSS_WON) {
+            statusBar.setForeground(Color.RED);
+            statusBar.setText("'X' Won! Click to play again.");
+        } else if (currentState == State.NOUGHT_WON) {
+            statusBar.setForeground(Color.RED);
+            statusBar.setText("'O' Won! Click to play again.");
+        }
+    }
+
+    /** Draw a gradient background */
+    private void drawGradientBackground(Graphics g) {
+        Graphics2D g2d = (Graphics2D) g;
+        GradientPaint gradient = new GradientPaint(0, 0, COLOR_BG_START, getWidth(), getHeight(), COLOR_BG_END);
+        g2d.setPaint(gradient);
+        g2d.fillRect(0, 0, getWidth(), getHeight());
+    }
+
+    private void stopBackgroundMusic() {
+        if (SoundEffect.GAME_START.isPlaying()) {
+            SoundEffect.GAME_START.stop();
+        }
+    }
+
+    public void setSinglePlayerMode(boolean isSinglePlayer) {
+        this.isSinglePlayer = isSinglePlayer;
+    }
+
+    /** The entry "main" method */
+    public void game() {
+        // Run GUI construction codes in Event-Dispatching thread for thread safety
+        javax.swing.SwingUtilities.invokeLater(() -> {
+            JFrame frame = new JFrame(TITLE);
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setSize(Board.CANVAS_WIDTH, Board.CANVAS_HEIGHT+70);
+            frame.setLocationRelativeTo(null); // Pusatkan jendela
+            frame.setContentPane(new MainMenu(frame)); // Set menu utama sebagai konten awal
+            frame.setVisible(true); // Tampilkan jendela    // show it
+        });
+    }
+
+    public static void main(String[] args) {
+        GameMain game = new GameMain();
+        game.game();
+    }
 }
