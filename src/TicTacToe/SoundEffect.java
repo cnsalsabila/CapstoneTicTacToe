@@ -7,7 +7,7 @@
  * 2 - 5026231068 - Nailah Adlina
  * 3 - 5026231173 - Naura Salsabila
  */
-ackage TicTacToe;
+package TicTacToe;
 
 import java.io.IOException;
 import java.net.URL;
