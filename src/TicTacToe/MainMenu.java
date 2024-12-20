@@ -72,4 +72,44 @@ public class MainMenu extends JPanel {
             }
         });
     }
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        if (backgroundImageIcon != null) {
+            // Scale and draw the background image
+            g.drawImage(backgroundImageIcon.getImage(), 0, 0, getWidth(), getHeight(), this);
+        }
+    }
+
+    // Helper method to load images with null handling
+    private Image loadImage(String path) {
+        try {
+            File file = new File(path);
+            Image img = ImageIO.read(file);
+            if (img != null) {
+                return img.getScaledInstance(250, 80, Image.SCALE_SMOOTH);
+            } else {
+                System.out.println("Image not found: " + path);
+            }
+        } catch (IOException e) {
+            System.out.println("Failed to load image: " + path + ". Error: " + e.getMessage());
+        }
+        return null;
+    }
+
+    // Helper method to load and return an ImageIcon for the background (supports GIF)
+    private ImageIcon loadImageback(String path) {
+        try {
+            File file = new File(path);
+            ImageIcon imgIcon = new ImageIcon(file.getAbsolutePath());
+            if (imgIcon != null) {
+                return imgIcon;
+            } else {
+                System.out.println("Image not found: " + path);
+            }
+        } catch (Exception e) {
+            System.out.println("Failed to load image: " + path + ". Error: " + e.getMessage());
+        }
+        return null;
+    }
 }
