@@ -65,5 +65,16 @@ public enum SoundEffect {
             System.out.println("Efek suara dimute atau clip null.");
         }
     }
+    /** Menghentikan suara */
+    public void stop() {
+        if (clip != null && clip.isRunning()) {
+            clip.stop(); // Hentikan suara
+        }
+    }
+    
+    /** Mengecek apakah klip sedang berjalan */
+    public boolean isPlaying() {
+        return clip != null && clip.isRunning();
+    }
     
 }
