@@ -71,4 +71,79 @@ public class Board {
             return State.DRAW; // no empty cell, it's a draw
         }
     }
+    /** Check if the given player has 4 in a line */
+    public boolean hasWon(Seed theSeed, int rowSelected, int colSelected) {
+        // Check for 4-in-a-line on the row
+        int count = 0;
+        for (int col = 0; col < COLS; ++col) {
+            if (cells[rowSelected][col].content == theSeed) {
+                ++count;
+                if (count == 4) return true;
+            } else {
+                count = 0;
+            }
+        }
+
+        // Check for 4-in-a-line on the column
+        count = 0;
+        for (int row = 0; row < ROWS; ++row) {
+            if (cells[row][colSelected].content == theSeed) {
+                ++count;
+                if (count == 4) return true;
+            } else {
+                count = 0;
+            }
+        }
+
+        // Check for 4-in-a-line on the diagonal
+        count = 0;
+        for (int offset = -Math.min(rowSelected, colSelected); offset < Math.min(ROWS - rowSelected, COLS - colSelected); ++offset) {
+            int row = rowSelected + offset;
+            int col = colSelected + offset;
+            if (cells[row][col].content == theSeed) {
+                ++count;
+                if (count == 4) return true;
+            } else {
+                count = 0;
+            }
+        }
+
+        // Check for 4-in-a-line on the anti-diagonal
+        count = 0;
+        for (int offset = -Math.min(rowSelected, COLS - 1 - colSelected); offset < Math.min(ROWS - rowSelected, colSelected + 1); ++offset) {
+            int row = rowSelected + offset;
+            int col = colSelected - offset;
+            if (cells[row][col].content == theSeed) {
+                ++count;
+                if (count == 4) return true;
+            } else {
+                count = 0;
+            }
+        }
+
+        return false;  // No 4-in-a-line found
+    }
+
+    /** Paint itself on the graphics canvas, given the Graphics context */
+    public void paint(Graphics g) {
+        // Draw the grid-lines
+        g.setColor(COLOR_GRID);
+        for (int row = 1; row < ROWS; ++row) {
+            g.fillRoundRect(0, Cell.SIZE * row - GRID_WIDTH_HALF,
+                    CANVAS_WIDTH - 1, GRID_WIDTH,
+                    GRID_WIDTH, GRID_WIDTH);
+        }
+        for (int col = 1; col < COLS; ++col) {
+            g.fillRoundRect(Cell.SIZE * col - GRID_WIDTH_HALF, 0 + Y_OFFSET,
+                    GRID_WIDTH, CANVAS_HEIGHT - 1,
+                    GRID_WIDTH, GRID_WIDTH);
+        }
+
+        // Draw all the cells
+        for (int row = 0; row < ROWS; ++row) {
+            for (int col = 0; col < COLS; ++col) {
+                cells[row][col].paint(g);  // ask the cell to paint itself
+            }
+        }
+    }
 }
