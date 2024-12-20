@@ -65,4 +65,22 @@ public class AIPlayerMinimax extends AIPlayer {
         }
         return new int[] {bestScore, bestRow, bestCol};
     }
+    private List<int[]> generateMoves() {
+        List<int[]> nextMoves = new ArrayList<int[]>(); // allocate List
+
+        // If gameover, i.e., no next move
+        if (hasWon(mySeed) || hasWon(oppSeed)) {
+            return nextMoves;   // return empty list
+        }
+
+        // Search for empty cells and add to the List
+        for (int row = 0; row < ROWS; ++row) {
+            for (int col = 0; col < COLS; ++col) {
+                if (cells[row][col].content == Seed.NO_SEED) {
+                    nextMoves.add(new int[] {row, col});
+                }
+            }
+        }
+        return nextMoves;
+    }
 }
